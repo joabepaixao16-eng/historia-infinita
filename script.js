@@ -55,12 +55,19 @@ async function carregarHistoria() {
 const cor = gerarCor(item.nome);
 
 html += `
-    <p>
-        <strong style="color:${cor}">
+    <div class="mensagem">
+
+        <div
+            class="autor"
+            style="color:${cor}">
             ${item.nome}
-        </strong>:
-        ${item.frase}
-    </p>
+        </div>
+
+        <div class="texto">
+            ${item.frase}
+        </div>
+
+    </div>
 `;
 ``
     });
