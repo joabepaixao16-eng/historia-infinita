@@ -52,32 +52,31 @@ async function carregarHistoria() {
 
     data.forEach(item => {
 
-    const cor = gerarCor(item.nome);
+const cor = gerarCor(item.nome);
 
-    html += `
-        <div class="mensagem">
+html += `
+    <div class="mensagem">
 
-            <div
-                class="autor"
-                style="color:${cor}">
-                ${item.nome}
-            </div>
-
-            <div class="texto">
-                ${item.frase}
-            </div>
-
+        <div
+            class="autor"
+            style="color:${cor}">
+            ${item.nome}
         </div>
-    `;
 
-});
+        <div class="texto">
+            ${item.frase}
+        </div>
+
+    </div>
+`;
 ``
+    });
 
     document.getElementById("historia").innerHTML = html;
 
     const historia = document.getElementById("historia");
 
-    historia.scrollTop = historia.scrollHeight;
+historia.scrollTop = historia.scrollHeight;
 }
 
 async function enviarFrase() {
@@ -87,35 +86,6 @@ async function enviarFrase() {
 
     const frase =
         document.getElementById("frase").value.trim();
-
-        let midia = "";
-
-        if(modoAdmin){
-
-    midia = prompt(
-        "Cole a URL da imagem ou GIF (ou deixe vazio)"
-    ) || "";
-}
-``
-
-const ehImagem = frase.match(
-    /(https?:\/\/.*\.(png|jpg|jpeg|gif|webp))/i
-);
-
-if(ehImagem){
-
-    if(!modoAdmin){
-
-        alert(
-            "Somente administradores podem enviar imagens."
-        );
-
-        return;
-    }
-
-    midia = ehImagem[0];
-}
-``
 
     if(!nome || !frase){
 
@@ -161,20 +131,20 @@ if(
     const { error } = await clienteSupabase
         .from("historia")
         .insert([
-    {
-        nome,
-        frase
+            {
+                nome,
+                frase
+            }
+        ]);
+
+    if(error){
+
+        console.error(error);
+
+        alert("Erro ao enviar a frase.");
+
+        return;
     }
-]);
-
-if(error){
-
-    console.error(error);
-
-    alert(error.message);
-
-    return;
-}
 
 document.getElementById("frase").value = "";
 
