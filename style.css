@@ -59,6 +59,10 @@ body{
     padding:15px;
 
     margin-bottom:12px;
+
+    word-wrap:break-word;
+
+    overflow-wrap:break-word;
 }
 
 #historia strong{
@@ -269,4 +273,15 @@ h1{
 
     box-shadow:
         0 0 15px rgba(168,85,247,0.35);
+}
+
+.imagem-historia{
+
+    width:100%;
+
+    max-width:500px;
+
+    border-radius:12px;
+
+    margin-top:10px;
 }
