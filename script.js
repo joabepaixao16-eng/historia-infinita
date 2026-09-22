@@ -54,7 +54,7 @@ async function carregarHistoria() {
 
     const cor = gerarCor(item.nome);
 
-     `
+    html += `
         <div class="mensagem">
 
             <div
@@ -79,7 +79,7 @@ async function carregarHistoria() {
 
     historia.scrollTop = historia.scrollHeight;
 }
-html +=
+
 async function enviarFrase() {
 
     const nome =
@@ -163,19 +163,18 @@ if(
         .insert([
     {
         nome,
-        frase,
-        midia
+        frase
     }
 ]);
 
-    if(error){
+if(error){
 
-        console.error(error);
+    console.error(error);
 
-        alert("Erro ao enviar a frase.");
+    alert(error.message);
 
-        return;
-    }
+    return;
+}
 
 document.getElementById("frase").value = "";
 
