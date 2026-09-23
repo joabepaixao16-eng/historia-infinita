@@ -396,3 +396,13 @@ h1{
 
     display:none;
 }
+
+.mensagem{
+    overflow:auto;
+}
+
+.texto{
+    white-space:pre-wrap;
+    overflow:auto;
+    font-family:inherit;
+}
