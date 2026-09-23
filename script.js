@@ -52,35 +52,40 @@ async function carregarHistoria() {
 
     data.forEach(item => {
 
+        console.log(item);
+
     const cor = gerarCor(item.nome);
 
     let conteudo = item.frase;
 
-    const imagem = conteudo.match(
-        /(https?:\/\/\S+\.(png|jpg|jpeg|gif|webp))/i
-    );
+    console.log(typeof item.midia);
+console.log(item.midia);
 
-    html += `
-        <div class="mensagem">
+const imagem = item.midia;
 
-            <div
-                class="autor"
-                style="color:${cor}">
-                ${item.nome}
-            </div>
+html += `
+<div class="mensagem">
 
-            <div class="texto">
-                ${item.frase}
-            </div>
+    <div
+        class="autor"
+        style="color:${cor}">
+        ${item.nome}
+    </div>
 
-            ${
-                imagem
-                ? `${imagem[0]}`
-                : ""
-            }
+    <div class="texto">
+        ${item.frase}
+    </div>
 
-        </div>
-    `;
+    ${
+        imagem
+        ? `${imagem}`
+        : ""
+    }
+
+</div>
+`;
+``
+
 });
     document.getElementById("historia").innerHTML = html;
 
@@ -153,13 +158,53 @@ if(
 
     return;
 }
-    
+  
+let urlImagem = "";
+
+if(imagemSelecionada){
+
+    const nomeArquivo =
+        Date.now() +
+        "_" +
+        imagemSelecionada.name;
+
+    const { error: erroUpload } =
+        await clienteSupabase.storage
+            .from("imagens")
+            .upload(
+                nomeArquivo,
+                imagemSelecionada
+            );
+
+    if(erroUpload){
+
+        alert(
+            erroUpload.message
+        );
+
+        return;
+    }
+
+    const { data } =
+    clienteSupabase.storage
+        .from("imagens")
+        .getPublicUrl(
+            nomeArquivo
+        );
+
+urlImagem =
+    data.publicUrl;
+
+}
+                
+
 const { error } = await clienteSupabase
     .from("historia")
     .insert([
         {
             nome,
-            frase
+            frase,
+            midia: urlImagem
         }
     ]);
 
@@ -173,6 +218,8 @@ if(error){
 }
 
 document.getElementById("frase").value = "";
+
+imagemSelecionada = null;
 
 document.getElementById("frase").focus();
 
@@ -255,9 +302,6 @@ document
     document.getElementById("btnAdmin")
         .style.display = "block";
 
-        document.getElementById("dropArea")
-    .style.display = "block";
-
     alert("Modo Admin ativado!");
 }
 
@@ -283,22 +327,35 @@ async function limparChat(){
     carregarHistoria();
 }
 
-const dropArea =
-document.getElementById("dropArea");
+let imagemSelecionada = null;
 
-dropArea.addEventListener("dragover", e => {
+const campoFrase =
+    document.getElementById("frase");
+
+campoFrase.addEventListener("dragover", e => {
 
     e.preventDefault();
 
 });
 
-dropArea.addEventListener("drop", e => {
+campoFrase.addEventListener("drop", e => {
 
     e.preventDefault();
 
-    const arquivo =
-    e.dataTransfer.files[0];
+    if(!modoAdmin){
 
-    console.log(arquivo);
+        alert(
+            "Somente administradores podem enviar imagens."
+        );
+
+        return;
+    }
+
+    imagemSelecionada =
+        e.dataTransfer.files[0];
+
+    alert(
+        `Imagem selecionada: ${imagemSelecionada.name}`
+    );
 
 });
