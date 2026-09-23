@@ -52,31 +52,41 @@ async function carregarHistoria() {
 
     data.forEach(item => {
 
-const cor = gerarCor(item.nome);
+    const cor = gerarCor(item.nome);
 
-html += `
-    <div class="mensagem">
+    let conteudo = item.frase;
 
-        <div
-            class="autor"
-            style="color:${cor}">
-            ${item.nome}
+    const imagem = conteudo.match(
+        /(https?:\/\/\S+\.(png|jpg|jpeg|gif|webp))/i
+    );
+
+    html += `
+        <div class="mensagem">
+
+            <div
+                class="autor"
+                style="color:${cor}">
+                ${item.nome}
+            </div>
+
+            <div class="texto">
+                ${item.frase}
+            </div>
+
+            ${
+                imagem
+                ? `${imagem[0]}`
+                : ""
+            }
+
         </div>
-
-        <div class="texto">
-            ${item.frase}
-        </div>
-
-    </div>
-`;
-``
-    });
-
+    `;
+});
     document.getElementById("historia").innerHTML = html;
 
     const historia = document.getElementById("historia");
 
-historia.scrollTop = historia.scrollHeight;
+    historia.scrollTop = historia.scrollHeight;
 }
 
 async function enviarFrase() {
@@ -86,6 +96,22 @@ async function enviarFrase() {
 
     const frase =
         document.getElementById("frase").value.trim();
+
+        const ehImagem = frase.match(
+    /(https?:\/\/\S+\.(png|jpg|jpeg|gif|webp))/i
+);
+
+if(ehImagem && !modoAdmin){
+
+    alert(
+        "Somente administradores podem enviar imagens."
+    );
+
+    return;
+}
+
+
+``
 
     if(!nome || !frase){
 
@@ -128,23 +154,23 @@ if(
     return;
 }
     
-    const { error } = await clienteSupabase
-        .from("historia")
-        .insert([
-            {
-                nome,
-                frase
-            }
-        ]);
+const { error } = await clienteSupabase
+    .from("historia")
+    .insert([
+        {
+            nome,
+            frase
+        }
+    ]);
 
-    if(error){
+if(error){
 
-        console.error(error);
+    console.error(error);
 
-        alert("Erro ao enviar a frase.");
+    alert(error.message);
 
-        return;
-    }
+    return;
+}
 
 document.getElementById("frase").value = "";
 
@@ -229,6 +255,9 @@ document
     document.getElementById("btnAdmin")
         .style.display = "block";
 
+        document.getElementById("dropArea")
+    .style.display = "block";
+
     alert("Modo Admin ativado!");
 }
 
@@ -253,3 +282,23 @@ async function limparChat(){
 
     carregarHistoria();
 }
+
+const dropArea =
+document.getElementById("dropArea");
+
+dropArea.addEventListener("dragover", e => {
+
+    e.preventDefault();
+
+});
+
+dropArea.addEventListener("drop", e => {
+
+    e.preventDefault();
+
+    const arquivo =
+    e.dataTransfer.files[0];
+
+    console.log(arquivo);
+
+});
