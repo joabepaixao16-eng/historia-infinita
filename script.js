@@ -106,6 +106,18 @@ async function enviarFrase() {
     /(https?:\/\/\S+\.(png|jpg|jpeg|gif|webp))/i
 );
 
+if(
+    frase.toLowerCase().includes("<script") ||
+    frase.toLowerCase().includes("</script>") ||
+    frase.toLowerCase().includes("onerror=") ||
+    frase.toLowerCase().includes("onclick=") ||
+    frase.toLowerCase().includes("onload=") ||
+    frase.toLowerCase().includes("<iframe")
+){
+    alert("Conteúdo inválido.");
+    return;
+}
+
 if(ehImagem && !modoAdmin){
 
     alert(
@@ -359,3 +371,13 @@ campoFrase.addEventListener("drop", e => {
     );
 
 });
+
+function escaparHtml(texto){
+
+    return texto
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
