@@ -76,12 +76,13 @@ html += `
         ${item.frase}
     </div>
 
-    <img
-    src="${imagem}"
-    width="100"
-    height="100"
-    style="object-fit:cover;"
-    >
+    ${
+    imagem
+    ? `
+        <img
+           `
+    : ""
+}
 
 </div>
 `;
@@ -100,10 +101,8 @@ async function enviarFrase() {
     const nome =
         document.getElementById("nome").value.trim();
 
-    const frase2 =
+    const frase =
         document.getElementById("frase").value.trim();
-
-    const frase = toString(frase2)
 
         const ehImagem = frase.match(
     /(https?:\/\/\S+\.(png|jpg|jpeg|gif|webp))/i
