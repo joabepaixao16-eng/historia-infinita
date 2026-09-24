@@ -73,8 +73,8 @@ html += `
     </div>
 
     <div class="texto">
-        ${item.frase || ""}
-    </div>
+    ${String(item.frase || "")}
+</div>
 
     ${
         imagem
@@ -208,6 +208,12 @@ urlImagem =
     data.publicUrl;
 
 }
+
+console.log({
+    nome,
+    frase,
+    urlImagem
+});
                 
 
 const { error } = await clienteSupabase
