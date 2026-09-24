@@ -61,7 +61,7 @@ async function carregarHistoria() {
     console.log(typeof item.midia);
 console.log(item.midia);
 
-const imagem = item.midia;
+const imagem = item.midia || "";
 
 html += `
 <div class="mensagem">
@@ -73,16 +73,14 @@ html += `
     </div>
 
     <div class="texto">
-        ${item.frase}
+        ${item.frase || ""}
     </div>
 
     ${
-    imagem
-    ? `
-        <img
-           `
-    : ""
-}
+        imagem
+        ? `${imagem}`
+        : ""
+    }
 
 </div>
 `;
